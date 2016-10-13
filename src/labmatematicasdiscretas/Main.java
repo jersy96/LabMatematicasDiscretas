@@ -41,6 +41,12 @@ public class Main {
             //System.out.println("Es Arbol: "+g.esArbol());
             //System.out.println("Numero de Componentes: "+g.componentes());
     //        g.BFSdistancia();
+            /*
+            
+            HOOOOOOLAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            CAMBIOOOOOOOOOOOOOOOO PARAAAA GIIIIIIIIIIIIIIIIITTTT
+            
+            */
         }
     }
 }
