@@ -27,7 +27,7 @@ public class Main {
                 b = Integer.parseInt(st.nextToken());
                 g.addEdge(a, b);
             }
-            boolean aux = g.isHamiltonian();
+            boolean aux = g.bipartidotest();
             System.out.println(aux);
         }
     }
@@ -104,9 +104,7 @@ class Graph {
 
     public void MostrarMatrizAdjl() {
         for (int i = 0; i < adjl.size(); i++) {
-//            System.out.println("i="+i);
             for (int j = 0; j < adjl.get(i).size(); j++) {
-//                System.out.println("j="+j);
                 System.out.print(adjl.get(i).get(j) + " ");
             }
             System.out.println();
@@ -130,7 +128,6 @@ class Graph {
     public void DFS(int v) {
         visitado[v] = true;
         for (int i = 1; i <= vertices; i++) {
-            System.out.println("i=" + i);
             if (adj[v][i] && !visitado[i]) {
                 DFS(i);
             }
@@ -138,6 +135,7 @@ class Graph {
     }
 
     LinkedList<Integer> hamilCycle;
+
     public boolean isHamiltonian() {
         hamilCycle = new LinkedList();
         for (int i = 1; i <= vertices; i++) {
@@ -151,7 +149,7 @@ class Graph {
     }
 
     public void hamiltonianCycleSinceV(int vi) {
-        if(!hamilCycle.contains(vi)){
+        if (!hamilCycle.contains(vi)) {
             hamilCycle.add(vi);
         }
         visitado[vi] = true;
@@ -168,20 +166,19 @@ class Graph {
     //Aporte Juan David
     //Aporte Juan David
     //Aporte Juan David
-    boolean[] visitado2;
-    int[] bipartido;
+    int[] setOfEachVertex;//aqui se guarda a que conjunto pertenece cada vertice, el indice es el vertice y el valor en ese indice es el conjunto al que pertenece ese vertice
 
     public boolean bipartidotest() {
-        bipartido = new int[vertices + 1];
-        visitado2 = new boolean[vertices + 1];
+        setOfEachVertex = new int[vertices + 1];
+        visitado = new boolean[vertices + 1];
         for (int i = 1; i <= vertices; i++) {
-            if (!visitado2[i]) {
-                DFS_A(i);
+            if (!visitado[i]) {
+                DFS_Bipartido(i, 1);
             }
         }
         for (int i = 1; i <= vertices; i++) {
             for (int j = 1; j <= vertices; j++) {
-                if (adj[i][j] && (bipartido[i] == bipartido[j])) {
+                if (adj[i][j] && (setOfEachVertex[i] == setOfEachVertex[j])) {
                     return false;
                 }
             }
@@ -189,26 +186,12 @@ class Graph {
         return true;
     }
 
-    public void DFS_A(int v) {
-        System.out.println("Estoy en el vertice " + v);
-        visitado2[v] = true;
-        bipartido[v] = 1;
+    public void DFS_Bipartido(int v, int set) {
+        visitado[v] = true;
+        setOfEachVertex[v] = set;
         for (int i = 1; i <= vertices; i++) {
-            if (adj[v][i] && !visitado2[i]) {
-                System.out.println("entre con i=" + i + " en el v=" + v);
-                DFS_B(i);
-            }
-        }
-    }
-
-    public void DFS_B(int v) {
-        System.out.println("Estoy en el vertice " + v);
-        visitado2[v] = true;
-        bipartido[v] = 2;
-        for (int i = 1; i <= vertices; i++) {
-            if (adj[v][i] && !visitado2[i]) {
-                System.out.println("entre con i=" + i + " en el v=" + v);
-                DFS_A(i);
+            if (adj[v][i] && !visitado[i]) {
+                DFS_Bipartido(i, (set % 2) + 1);
             }
         }
     }
