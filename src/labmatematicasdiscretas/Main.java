@@ -38,9 +38,9 @@ public class Main {
 
 class Graph {
 
-    int vertices, aristas;
-    boolean[][] adj;
-    ArrayList<ArrayList<Integer>> adjl;
+    private int vertices, aristas;
+    private boolean[][] adj;
+    private ArrayList<ArrayList<Integer>> adjl;
 
     public Graph(int Vertices, int Aristas) {
         this.vertices = Vertices;
@@ -126,7 +126,7 @@ class Graph {
         return adjl.get(v).size();
     }
 
-    boolean[] visitado;
+    private boolean[] visitado;
 
     public void DFS(int v) {
         visitado[v] = true;
@@ -137,7 +137,7 @@ class Graph {
         }
     }
 
-    LinkedList<Integer> hamilCycle;
+    private LinkedList<Integer> hamilCycle;
 
     public boolean isHamiltonian() {
         hamilCycle = new LinkedList();
@@ -172,8 +172,8 @@ class Graph {
     //Aporte Juan David
     //Aporte Juan David
     //Aporte Juan David
-    int[] setOfEachVertex;//aqui se guarda a que conjunto pertenece cada vertice, el indice es el vertice y el valor en ese indice es el conjunto al que pertenece ese vertice
 
+    private int[] setOfEachVertex;//aqui se guarda a que conjunto pertenece cada vertice, el indice es el vertice y el valor en ese indice es el conjunto al que pertenece ese vertice
     public boolean kPartiteTest(int k) {
         setOfEachVertex = new int[vertices + 1];
         visitado = new boolean[vertices + 1];
