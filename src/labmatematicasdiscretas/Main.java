@@ -27,8 +27,11 @@ public class Main {
                 b = Integer.parseInt(st.nextToken());
                 g.addEdge(a, b);
             }
-            boolean aux = g.bipartidotest();
-            System.out.println(aux);
+            boolean aux;
+            for(int i = 1; i <= 5; i++){
+                aux = g.kPartiteTest(i);
+                System.out.println(aux);
+            }
         }
     }
 }
@@ -163,17 +166,20 @@ class Graph {
             visitado[hamilCycle.pollLast()] = false;
         }
     }
+    
+    
+    
     //Aporte Juan David
     //Aporte Juan David
     //Aporte Juan David
     int[] setOfEachVertex;//aqui se guarda a que conjunto pertenece cada vertice, el indice es el vertice y el valor en ese indice es el conjunto al que pertenece ese vertice
 
-    public boolean bipartidotest() {
+    public boolean kPartiteTest(int k) {
         setOfEachVertex = new int[vertices + 1];
         visitado = new boolean[vertices + 1];
         for (int i = 1; i <= vertices; i++) {
             if (!visitado[i]) {
-                DFS_Bipartido(i, 1);
+                DFS_kPartite(i, 1, k);
             }
         }
         for (int i = 1; i <= vertices; i++) {
@@ -186,12 +192,12 @@ class Graph {
         return true;
     }
 
-    public void DFS_Bipartido(int v, int set) {
+    public void DFS_kPartite(int v, int set, int k) {
         visitado[v] = true;
         setOfEachVertex[v] = set;
         for (int i = 1; i <= vertices; i++) {
             if (adj[v][i] && !visitado[i]) {
-                DFS_Bipartido(i, (set % 2) + 1);
+                DFS_kPartite(i, (set % k) + 1, k);
             }
         }
     }
