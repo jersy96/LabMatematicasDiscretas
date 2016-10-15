@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
-import sun.misc.Queue;
 
 public class Main {
 
@@ -27,11 +26,8 @@ public class Main {
                 b = Integer.parseInt(st.nextToken());
                 g.addEdge(a, b);
             }
-            boolean aux;
-            for(int i = 1; i <= 5; i++){
-                aux = g.kPartiteTest(i);
-                System.out.println(aux);
-            }
+            int aux = g.minimunKPartite();
+            System.out.println(aux);
         }
     }
 }
@@ -106,9 +102,9 @@ class Graph {
     }
 
     public void MostrarMatrizAdjl() {
-        for (int i = 0; i < adjl.size(); i++) {
-            for (int j = 0; j < adjl.get(i).size(); j++) {
-                System.out.print(adjl.get(i).get(j) + " ");
+        for (ArrayList<Integer> adjl1 : adjl) {
+            for (Integer adjl11 : adjl1) {
+                System.out.print(adjl11 + " ");
             }
             System.out.println();
         }
@@ -150,8 +146,17 @@ class Graph {
         }
         return false;
     }
-
-    public void hamiltonianCycleSinceV(int vi) {
+    
+    private void writeArray(boolean[] a, String s){
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
+        System.out.println(s);
+        for(boolean b : a){
+            System.out.println(b);
+        }
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
+    }
+    
+    private void hamiltonianCycleSinceV(int vi) {
         if (!hamilCycle.contains(vi)) {
             hamilCycle.add(vi);
         }
@@ -166,17 +171,24 @@ class Graph {
             visitado[hamilCycle.pollLast()] = false;
         }
     }
-    
-    
-    
-    //Aporte Juan David
-    //Aporte Juan David
-    //Aporte Juan David
 
+    public int minimunKPartite() {
+        int i = 1;
+        while (i < vertices && !kPartiteTest(i)) {
+            i++;
+        }
+        return i;
+    }
+
+    //Aporte Juan David
+    //Aporte Juan David
+    //Aporte Juan David
     private int[] setOfEachVertex;//aqui se guarda a que conjunto pertenece cada vertice, el indice es el vertice y el valor en ese indice es el conjunto al que pertenece ese vertice
+
     public boolean kPartiteTest(int k) {
         setOfEachVertex = new int[vertices + 1];
         visitado = new boolean[vertices + 1];
+        writeArray(visitado, "ACABE DE INSTANCIAR VISITADOS");
         for (int i = 1; i <= vertices; i++) {
             if (!visitado[i]) {
                 DFS_kPartite(i, 1, k);
@@ -192,8 +204,9 @@ class Graph {
         return true;
     }
 
-    public void DFS_kPartite(int v, int set, int k) {
+    private void DFS_kPartite(int v, int set, int k) {
         visitado[v] = true;
+        writeArray(visitado, "puse la posicion "+v+" como true");
         setOfEachVertex[v] = set;
         for (int i = 1; i <= vertices; i++) {
             if (adj[v][i] && !visitado[i]) {
@@ -268,7 +281,7 @@ class Graph {
         }
     }
 
-    public void BFSdistancia() {
+    private void BFSdistancia() {
         visitado = new boolean[vertices + 1];
         LinkedList<pair> cola = new LinkedList<pair>();
         cola.add(new pair(1, 0));
