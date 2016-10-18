@@ -26,6 +26,7 @@ public class Main {
                 b = Integer.parseInt(st.nextToken());
                 g.addEdge(a, b);
             }
+            System.out.println(g.kPartiteTest(3));
             int aux = g.minimunKPartite();
             System.out.println(aux);
         }
@@ -34,15 +35,15 @@ public class Main {
 
 class Graph {
 
-    private int vertices, aristas;
-    private boolean[][] adj;
-    private ArrayList<ArrayList<Integer>> adjl;
+    private final int vertices, aristas;
+    private final boolean[][] adj;
+    private final ArrayList<ArrayList<Integer>> adjl;
 
     public Graph(int Vertices, int Aristas) {
         this.vertices = Vertices;
         this.aristas = Aristas;
         adj = new boolean[Vertices + 1][Vertices + 1];
-        adjl = new ArrayList<ArrayList<Integer>>();
+        adjl = new ArrayList();
         for (int i = 0; i <= Vertices; i++) {
             adjl.add(new ArrayList<Integer>());
         }
