@@ -147,16 +147,16 @@ class Graph {
         }
         return false;
     }
-    
-    private void writeArray(boolean[] a, String s){
+
+    private void writeArray(boolean[] a, String s) {
         System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
         System.out.println(s);
-        for(boolean b : a){
+        for (boolean b : a) {
             System.out.println(b);
         }
         System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
     }
-    
+
     private void hamiltonianCycleSinceV(int vi) {
         if (!hamilCycle.contains(vi)) {
             hamilCycle.add(vi);
@@ -179,6 +179,31 @@ class Graph {
             i++;
         }
         return i;
+    }
+
+    private int minimumKPartite;
+
+    public int minimumKPartiteTestByForce() {
+        setOfEachVertex = new int[vertices + 1];
+        visitado = new boolean[vertices + 1];
+        writeArray(visitado, "ACABE DE INSTANCIAR VISITADOS");
+        for (int i = 1; i <= vertices; i++) {
+            if (!visitado[i]) {
+                DFS_kPartiteByForce(i, 1);
+            }
+        }
+        return minimumKPartite;
+    }
+
+    private void DFS_kPartiteByForce(int v, int set) {
+        visitado[v] = true;
+        writeArray(visitado, "puse la posicion " + v + " como true");
+        setOfEachVertex[v] = set;
+        for (int i = 1; i <= vertices; i++) {
+            if (adj[v][i] && !visitado[i]) {
+                DFS_kPartite(i, (set % k) + 1, k);
+            }
+        }
     }
 
     //Aporte Juan David
@@ -207,7 +232,7 @@ class Graph {
 
     private void DFS_kPartite(int v, int set, int k) {
         visitado[v] = true;
-        writeArray(visitado, "puse la posicion "+v+" como true");
+        writeArray(visitado, "puse la posicion " + v + " como true");
         setOfEachVertex[v] = set;
         for (int i = 1; i <= vertices; i++) {
             if (adj[v][i] && !visitado[i]) {
