@@ -35,7 +35,7 @@ public class DiGraph {
             c = Integer.parseInt(st.nextToken());
             this.addEdge(a, b, c);
         }
-        System.out.println(maxFlow(1, 8));
+        System.out.println("Maximo Flujo: "+maxFlow(1, 6));
     }
 
     public final void addEdge(int v1, int v2, int capacity) {
@@ -45,6 +45,7 @@ public class DiGraph {
 
     private int[] BFSMaxFlow(int source, int target) {
         //ir guardadno los padres y que apenas se encuentre a target empezar a volver desde target hasta source y encontrar cual fue la arista con capacidad residual menor y en esa cantidad es que se va a incrementar el flujo
+        visitado = new boolean[vertices + 1];
         int[] parents = new int[vertices + 1];
         LinkedList<Integer> cola = new LinkedList();
         cola.add(source);
@@ -67,7 +68,6 @@ public class DiGraph {
     }
 
     public int maxFlow(int source, int target) {
-        visitado = new boolean[vertices + 1];
         int maxFlow = 0;
         int[] parents;
         parents = BFSMaxFlow(source, target);
@@ -85,7 +85,7 @@ public class DiGraph {
             }
             i = target;
             while (i != source) {
-                flow[parents[i]][i] = flowIncrement;
+                flow[parents[i]][i] += flowIncrement;
                 i = parents[i];
             }
             maxFlow += flowIncrement;
