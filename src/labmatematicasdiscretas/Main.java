@@ -10,26 +10,27 @@ import java.util.StringTokenizer;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        while (true) {
-            System.out.println("Digite numero de vertices y aristas");
-            st = new StringTokenizer(br.readLine());
-            int v = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int a, b;
-            Graph g = new Graph(v, e);
-            System.out.println("Digite las aristas:");
-            for (int i = 0; i < e; i++) {
-                st = new StringTokenizer(br.readLine());
-                a = Integer.parseInt(st.nextToken());
-                b = Integer.parseInt(st.nextToken());
-                g.addEdge(a, b);
-            }
-            System.out.println(g.kPartiteTest(3));
-            int aux = g.minimunKPartite();
-            System.out.println(aux);
-        }
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        StringTokenizer st;
+//        while (true) {
+//            System.out.println("Digite numero de vertices y aristas");
+//            st = new StringTokenizer(br.readLine());
+//            int v = Integer.parseInt(st.nextToken());
+//            int e = Integer.parseInt(st.nextToken());
+//            int a, b;
+//            Graph g = new Graph(v, e);
+//            System.out.println("Digite las aristas:");
+//            for (int i = 0; i < e; i++) {
+//                st = new StringTokenizer(br.readLine());
+//                a = Integer.parseInt(st.nextToken());
+//                b = Integer.parseInt(st.nextToken());
+//                g.addEdge(a, b);
+//            }
+//            System.out.println(g.kPartiteTest(3));
+//            int aux = g.minimunKPartite();
+//            System.out.println(aux);
+//        }
+        DiGraph dg = new DiGraph();
     }
 }
 
@@ -149,12 +150,10 @@ class Graph {
     }
 
     private void writeArray(boolean[] a, String s) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
         System.out.println(s);
         for (boolean b : a) {
             System.out.println(b);
         }
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYYYYY");
     }
 
     private void hamiltonianCycleSinceV(int vi) {
@@ -180,32 +179,6 @@ class Graph {
         }
         return i;
     }
-
-    private int minimumKPartite;
-
-    public int minimumKPartiteTestByForce() {
-        setOfEachVertex = new int[vertices + 1];
-        visitado = new boolean[vertices + 1];
-        writeArray(visitado, "ACABE DE INSTANCIAR VISITADOS");
-        for (int i = 1; i <= vertices; i++) {
-            if (!visitado[i]) {
-                DFS_kPartiteByForce(i, 1);
-            }
-        }
-        return minimumKPartite;
-    }
-
-    private void DFS_kPartiteByForce(int v, int set) {
-        visitado[v] = true;
-        writeArray(visitado, "puse la posicion " + v + " como true");
-        setOfEachVertex[v] = set;
-        for (int i = 1; i <= vertices; i++) {
-            if (adj[v][i] && !visitado[i]) {
-                DFS_kPartite(i, (set % k) + 1, k);
-            }
-        }
-    }
-
     //Aporte Juan David
     //Aporte Juan David
     //Aporte Juan David
