@@ -10,7 +10,7 @@ public class DiGraph {
 
     private final int vertices, aristas;
     private final boolean[][] adj;
-    private boolean[] visitado;
+    private final int[] resCap;
     private final int[][] cap, flow;
 
     ;
@@ -26,6 +26,7 @@ public class DiGraph {
         adj = new boolean[vertices + 1][vertices + 1];
         cap = new int[vertices + 1][vertices + 1];
         flow = new int[vertices + 1][vertices + 1];
+        resCap = new int[vertices + 1];
         int a, b, c;
         System.out.println("Digite las aristas:");
         for (int i = 0; i < aristas; i++) {
@@ -35,7 +36,7 @@ public class DiGraph {
             c = Integer.parseInt(st.nextToken());
             this.addEdge(a, b, c);
         }
-        System.out.println("Maximo Flujo: "+maxFlow(1, vertices));
+        System.out.println("Maximo Flujo: " + maxFlow(1, vertices));
     }
 
     public final void addEdge(int v1, int v2, int capacity) {
@@ -43,56 +44,68 @@ public class DiGraph {
         cap[v1][v2] = capacity;
     }
 
-    private int[] BFSMaxFlow(int source, int target) {
-        //ir guardadno los padres y que apenas se encuentre a target empezar a volver desde target hasta source y encontrar cual fue la arista con capacidad residual menor y en esa cantidad es que se va a incrementar el flujo
-        visitado = new boolean[vertices + 1];
-        int[] parents = new int[vertices + 1];
-        LinkedList<Integer> cola = new LinkedList();
-        cola.add(source);
-        visitado[1] = true;
-        while (!cola.isEmpty() && !visitado[target]) {
-            int ver = cola.poll();
-            for (int i = 1; i <= vertices; ++i) {
-                if (adj[ver][i] && !visitado[i] && (cap[ver][i] - flow[ver][i]) > 0) {
-                    visitado[i] = true;
-                    parents[i] = ver;
-                    cola.add(i);
+    public int maxFlow(int source, int target) {
+        boolean incrementPathFound;
+        int maxFlow = 0;
+        do {
+            incrementPathFound = false;
+            int[] parents = new int[vertices + 1];
+            LinkedList<Integer> cola = new LinkedList();
+            cola.add(source);
+            while (!cola.isEmpty()) {
+                int ver = cola.poll();
+                for (int i = 1; i <= vertices; ++i) {
+                    if (!cola.contains(i)) {
+                        int aux = cap[ver][i] - flow[ver][i];
+                        if (adj[ver][i] && aux > 0) {//forward edge
+                            cola.add(i);
+                            parents[i] = ver;
+                            if (resCap[ver] < aux) {
+                                resCap[i] = resCap[ver];
+                            } else {
+                                resCap[i] = aux;
+                            }
+                            if (i == target) {
+                                syncFlow(source, target, parents);
+                                maxFlow += resCap[target];
+                                incrementPathFound = true;
+                            }
+                        }
+                        aux = flow[i][ver];
+                        if (adj[i][ver] && aux > 0) {//backward edge
+                            cola.add(i);
+                            parents[i] = -1 * ver;
+                            if (resCap[ver] < aux) {
+                                resCap[i] = resCap[ver];
+                            } else {
+                                resCap[i] = aux;
+                            }
+                            if (i == target) {
+                                syncFlow(source, target, parents);
+                                maxFlow += resCap[target];
+                                incrementPathFound = true;
+                            }
+                        }
+                    }
                 }
             }
-        }
-        if (visitado[target]) {
-            return parents;
-        } else {
-            return null;
-        }
+        } while (incrementPathFound);
+        return maxFlow;
     }
 
-    public int maxFlow(int source, int target) {
-        int maxFlow = 0;
-        int[] parents;
-        parents = BFSMaxFlow(source, target);
-        while (parents != null) {
-            int flowIncrement = Integer.MAX_VALUE;
-            int i = target;
-//            int flowIncrement = cap[parents[target]][target] - flow[parents[target]][target];
-//            int i = parents[target];
-            int aux;
-            while (i != source) {
-                aux = cap[parents[i]][i] - flow[parents[i]][i];
-                if (aux < flowIncrement) {
-                    flowIncrement = aux;
-                }
-                i = parents[i];
+    private void syncFlow(int source, int target, int[] parents) {
+        int v = target;
+        int rc = resCap[target];
+        do {
+            int aux = parents[v];
+            if (aux > 0) {
+                flow[aux][v] += rc;
+            } else {
+                aux *= -1;;
+                flow[aux][v] -= rc;
             }
-            i = target;
-            while (i != source) {
-                flow[parents[i]][i] += flowIncrement;
-                i = parents[i];
-            }
-            maxFlow += flowIncrement;
-            parents = BFSMaxFlow(source, target);
-        }
-        return maxFlow;
+            v = parents[v];
+        } while (v != source);
     }
 
 }
