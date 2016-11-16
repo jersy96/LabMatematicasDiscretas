@@ -35,7 +35,7 @@ public class DiGraph {
             c = Integer.parseInt(st.nextToken());
             this.addEdge(a, b, c);
         }
-        System.out.println("Maximo Flujo: "+maxFlow(1, 6));
+        System.out.println("Maximo Flujo: "+maxFlow(1, vertices));
     }
 
     public final void addEdge(int v1, int v2, int capacity) {
@@ -72,9 +72,10 @@ public class DiGraph {
         int[] parents;
         parents = BFSMaxFlow(source, target);
         while (parents != null) {
-//            int flowIncrement = Integer.MAX_VALUE;
-            int flowIncrement = cap[parents[target]][target] - flow[parents[target]][target];
-            int i = parents[target];
+            int flowIncrement = Integer.MAX_VALUE;
+            int i = target;
+//            int flowIncrement = cap[parents[target]][target] - flow[parents[target]][target];
+//            int i = parents[target];
             int aux;
             while (i != source) {
                 aux = cap[parents[i]][i] - flow[parents[i]][i];
