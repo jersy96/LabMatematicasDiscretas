@@ -3,7 +3,7 @@ package labmatematicasdiscretas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class DiGraph {
@@ -48,19 +48,20 @@ public class DiGraph {
         boolean incrementPathFound;
         int maxFlow = 0;
         do {
-            incrementPathFound = false;
+            int k = 0;
             int[] parents = new int[vertices + 1];
-            LinkedList<Integer> cola = new LinkedList();
+            incrementPathFound = false;
+            ArrayList<Integer> cola = new ArrayList();
             cola.add(source);
-            while (!cola.isEmpty()) {
-                int ver = cola.poll();
+            do {
+                int ver = cola.get(k);
                 for (int i = 1; i <= vertices; ++i) {
                     if (!cola.contains(i)) {
                         int aux = cap[ver][i] - flow[ver][i];
                         if (adj[ver][i] && aux > 0) {//forward edge
                             cola.add(i);
                             parents[i] = ver;
-                            if (resCap[ver] < aux) {
+                            if (resCap[ver] < aux && ver != source) {
                                 resCap[i] = resCap[ver];
                             } else {
                                 resCap[i] = aux;
@@ -88,7 +89,8 @@ public class DiGraph {
                         }
                     }
                 }
-            }
+                k++;
+            } while (k < cola.size());
         } while (incrementPathFound);
         return maxFlow;
     }
@@ -97,14 +99,12 @@ public class DiGraph {
         int v = target;
         int rc = resCap[target];
         do {
-            int aux = parents[v];
-            if (aux > 0) {
-                flow[aux][v] += rc;
+            if (parents[v] > 0) {
+                flow[parents[v]][v] += rc;
             } else {
-                aux *= -1;;
-                flow[aux][v] -= rc;
+                flow[-1 * parents[v]][v] -= rc;
             }
-            v = parents[v];
+            v = Math.abs(parents[v]);
         } while (v != source);
     }
 
