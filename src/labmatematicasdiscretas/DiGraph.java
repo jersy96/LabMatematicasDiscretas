@@ -14,29 +14,13 @@ public class DiGraph {
     private final int[][] cap, flow;
 
     ;
-    public DiGraph() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        System.out.println("Digite numero de vertices y aristas");
-        st = new StringTokenizer(br.readLine());
-        vertices = Integer.parseInt(st.nextToken());
-        aristas = Integer.parseInt(st.nextToken());
-//        this.vertices = vertices;
-//        this.aristas = aristas;
+    public DiGraph(int vertices, int aristas) {
+        this.vertices = vertices;
+        this.aristas = aristas;
         adj = new boolean[vertices + 1][vertices + 1];
         cap = new int[vertices + 1][vertices + 1];
         flow = new int[vertices + 1][vertices + 1];
         resCap = new int[vertices + 1];
-        int a, b, c;
-        System.out.println("Digite las aristas:");
-        for (int i = 0; i < aristas; i++) {
-            st = new StringTokenizer(br.readLine());
-            a = Integer.parseInt(st.nextToken());
-            b = Integer.parseInt(st.nextToken());
-            c = Integer.parseInt(st.nextToken());
-            this.addEdge(a, b, c);
-        }
-        System.out.println("Maximo Flujo: " + maxFlow(1, vertices));
     }
 
     public final void addEdge(int v1, int v2, int capacity) {
