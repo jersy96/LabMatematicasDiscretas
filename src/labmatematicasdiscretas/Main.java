@@ -131,7 +131,7 @@ public class Main {
                         }
                     } while (target > v || source > v || target < 1 || source < 1);
                     DiGraph dg = new DiGraph(v, e, source, target);
-                    System.out.println("Digite las aristas en el siguiente formato (vertice1 vertice2 capacidad):");
+                    System.out.println("Digite las aristas en el siguiente formato (vertice1 vertice2 capacidad)[La direccion de la arista sera vertice1 --> vertice2]:");
                     for (int i = 0; i < e; i++) {
                         st = new StringTokenizer(br.readLine());
                         a = Integer.parseInt(st.nextToken());
@@ -345,18 +345,17 @@ class Graph {
 
     //BLOQUES, PUENTES Y PUNTOS DE CORTE
     //Puentes
-    public void puentes(ArrayList<Integer> puentes) {
-        boolean[][] adj_2;
+    public void puentes() {
+        ArrayList<Integer> puentes = new ArrayList();
         for (int i = 1; i <= vertices; i++) {
-            adj_2 = adj;
             for (int j = 1; j <= vertices; j++) {
-                if (adj_2[i][j]) {
-                    adj_2[i][j] = false;
-                    if (!esconexo_puente(adj_2)) {
+                if (adj[i][j]) {
+                    adj[i][j] = false;
+                    if (!esconexo()) {
                         puentes.add(i);
                         puentes.add(j);
                     }
-                    adj_2[i][j] = true;
+                    adj[i][j] = true;
                 }
             }
         }
@@ -400,7 +399,6 @@ class Graph {
                 }
             }
         }
-
     }
 
     public void DFS_VerticesCortes(int v, int elimin, ArrayList<Integer> Eliminados) {
@@ -432,11 +430,10 @@ class Graph {
     //Bloques
     public void bloques() {
         ArrayList<Integer> PtoCorte = new ArrayList<>();
-        ArrayList<Integer> puentes = new ArrayList<>();
         ArrayList<Integer> Eliminados = new ArrayList<>();
         ArrayList<ArrayList<Integer>> Bloques = new ArrayList<>();
         ArrayList<Integer> temporal = new ArrayList<>();
-        puentes(puentes);
+        puentes();
         puntosdecorte(PtoCorte, Eliminados);
         if (PtoCorte.size() > 0) {
             System.out.print("los vertices de corte son:");
@@ -565,7 +562,7 @@ class Graph {
     public void ArbolExpansion() {//Prim    
         //inicializar el array    
         boolean[] visit = new boolean[vertices + 1];
-        int prim[][] = new int[vertices + 1][3];//columna 1 costo columna 2      nodo adyacente con menor costo.
+        int prim[][] = new int[vertices + 1][3];//columna 1 costo columna 2 nodo adyacente con menor costo.
         for (int i = 0; i <= vertices; i++) { //inicializar...
             visit[i] = false;
             prim[i][1] = (int) Double.MAX_VALUE;
