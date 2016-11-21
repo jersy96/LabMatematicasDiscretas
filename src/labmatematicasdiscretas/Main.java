@@ -7,47 +7,146 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
+//JAVIER RONCALLO 4021-02
+//JUAN DAVID LAGARES, ELVIS PAVA 4021-01
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        st = new StringTokenizer(br.readLine());
         int aux, a, b, c, v, e;
         do {
-            System.out.println("Usted desea usar un grafo simple(1) o un digrafo(2)?");
-            aux = Integer.parseInt(st.nextToken());
-        } while (aux != 1 && aux != 2);
-        switch (aux) {
-            case 1:
-                System.out.println("Digite numero de vertices y aristas");
-                v = Integer.parseInt(st.nextToken());
-                e = Integer.parseInt(st.nextToken());
-                Graph g = new Graph(v, e);
-                System.out.println("Digite las aristas:");
-                for (int i = 0; i < e; i++) {
-                    st = new StringTokenizer(br.readLine());
-                    a = Integer.parseInt(st.nextToken());
-                    b = Integer.parseInt(st.nextToken());
-                    g.addEdge(a, b);
-                }
-                break;
-            case 2:
-                System.out.println("Digite numero de vertices y aristas");
+            do {
+                System.out.println("Usted desea usar un grafo simple(1), un digrafo[maximo flujo](2), salir(3)");
                 st = new StringTokenizer(br.readLine());
-                v = Integer.parseInt(st.nextToken());
-                e = Integer.parseInt(st.nextToken());
-                DiGraph dg = new DiGraph(v, e);
-                System.out.println("Digite las aristas en el siguiente formato (vertice1 vertice2 capacidad):");
-                for (int i = 0; i < e; i++) {
+                aux = Integer.parseInt(st.nextToken());
+            } while (aux != 1 && aux != 2 && aux != 3);
+            switch (aux) {
+                case 1:
+                    System.out.println("Digite numero de vertices y aristas");
                     st = new StringTokenizer(br.readLine());
-                    a = Integer.parseInt(st.nextToken());
-                    b = Integer.parseInt(st.nextToken());
-                    c = Integer.parseInt(st.nextToken());
-                    dg.addEdge(a, b, c);
-                }
-                break;
-        }
+                    v = Integer.parseInt(st.nextToken());
+                    e = Integer.parseInt(st.nextToken());
+                    Graph g = new Graph(v, e);
+                    System.out.println("Digite las aristas:");
+                    for (int i = 0; i < e; i++) {
+                        st = new StringTokenizer(br.readLine());
+                        a = Integer.parseInt(st.nextToken());
+                        b = Integer.parseInt(st.nextToken());
+                        g.addEdge(a, b);
+                    }
+                    int op;
+                    do {
+                        System.out.println("Seleccione una opcion:");
+                        System.out.println("1. Tipo del Grafo");
+                        System.out.println("2. Matriz de Adyacencia");
+                        System.out.println("3. Menor y Mayor grado del grafo");
+                        System.out.println("4. ¿Es Conexo?. En caso contrario Numero de Componentes");
+                        System.out.println("5. Diametro del grafo y un Recorrido entre dos vertices");
+                        System.out.println("6. ¿Es bipartido?, ¿Es regular?, ¿es Arbol? y un Arbol de Expansion");
+                        System.out.println("7. ¿Es Euleriano o Hamiltoniano?");
+                        System.out.println("8. Bloques, Puentes y Puntos de corte");
+                        System.out.println("9. λ(G) y κ(G)");
+                        System.out.println("10. Volver al menu grafo/digrafo");
+                        st = new StringTokenizer(br.readLine());
+                        op = Integer.parseInt(st.nextToken());
+                        switch (op) {
+                            case 1:
+                                System.out.println("Tipo de Grafo: " + g.tipo());
+                                break;
+                            case 2:
+                                g.MostrarMatriz();
+                                break;
+                            case 3:
+                                System.out.println(g.minGrado());
+                                System.out.println(g.maxGrado());
+                                break;
+                            case 4:
+                                if (g.esconexo()) {
+                                    System.out.println("El Grafo es Conexo");
+                                } else {
+                                    System.out.println("El Grafo NO es conexo");
+                                    System.out.println("Tiene " + g.componentes() + " componente(s)");
+                                }
+                                break;
+                            case 5:
+                                System.out.println("El diametro es: " + g.diametro());
+                                g.recorrido();
+                                break;
+                            case 6:
+                                System.out.println("El grafo es bipartido: " + g.bipartidotest());
+                                System.out.println("El grafo es regular: " + g.esRegular());
+                                System.out.println("El grafo es Arbol: " + g.esArbol());
+                                if (g.esconexo()) {
+                                    g.ArbolExpansion();
+                                }else{
+                                    System.out.println("El grafo no es conexo, no se puede calcular un arbol de expansion");
+                                }
+                                break;
+                            case 7:
+                                if (g.esconexo()) {
+                                    System.out.println("El grafo es euleriano: " + g.esEuleriano());
+                                    System.out.println("El grafo es hamiltoniano: " + g.isHamiltonian());
+                                } else {
+                                    System.out.println("El grafo no es conexo, no se puede calcular este item");
+                                }
+                                break;
+                            case 8:
+                                if (g.esconexo()) {
+                                    g.bloques();
+                                } else {
+                                    System.out.println("El grafo debe ser conexo para poder calcular este item");
+                                }
+                                break;
+                            case 9:
+                                g.ConjMinAristasCorte();
+                                g.ConjMinVertisesCorte();
+                                break;
+                            case 10:
+                                break;
+                            default:
+                                System.out.println("Digite opcion valida");
+                                break;
+                        }
+                        if (op != 10) {
+                            System.out.println("Presione enter para continuar");
+                            st = new StringTokenizer(br.readLine());
+                        }
+                    } while (op != 10);
+                    break;
+                case 2:
+                    System.out.println("Digite numero de vertices y aristas");
+                    st = new StringTokenizer(br.readLine());
+                    v = Integer.parseInt(st.nextToken());
+                    e = Integer.parseInt(st.nextToken());
+                    int source,
+                     target;
+                    do {
+                        System.out.println("Digite vertice fuente y meta en siguiente forma: fuente meta");
+                        st = new StringTokenizer(br.readLine());
+                        source = Integer.parseInt(st.nextToken());
+                        target = Integer.parseInt(st.nextToken());
+                        if (target > v || source > v || target < 1 || source < 1) {
+                            System.out.println("el vertice fuente o meta estan fuera de rango");
+                        }
+                    } while (target > v || source > v || target < 1 || source < 1);
+                    DiGraph dg = new DiGraph(v, e, source, target);
+                    System.out.println("Digite las aristas en el siguiente formato (vertice1 vertice2 capacidad):");
+                    for (int i = 0; i < e; i++) {
+                        st = new StringTokenizer(br.readLine());
+                        a = Integer.parseInt(st.nextToken());
+                        b = Integer.parseInt(st.nextToken());
+                        c = Integer.parseInt(st.nextToken());
+                        if (a != target) {
+                            dg.addEdge(a, b, c);
+                        } else {
+                            System.out.println("Arista no agregada, el vertice meta no debe tener aristas de salida");
+                        }
+                    }
+                    System.out.println("Maximo flujo " + dg.maxFlow());
+                    break;
+            }
+        } while (aux != 3);
     }
 }
 
@@ -61,7 +160,8 @@ class Graph {
         this.vertices = Vertices;
         this.aristas = Aristas;
         adj = new boolean[Vertices + 1][Vertices + 1];
-        adjl = new ArrayList();
+        adjl = new ArrayList<>();
+        NombAristas = new ArrayList<>();
         for (int i = 0; i <= Vertices; i++) {
             adjl.add(new ArrayList<Integer>());
         }
@@ -69,6 +169,10 @@ class Graph {
 
     public void addEdge(int a, int b) {
         adj[a][b] = adj[b][a] = true;
+        NombAristas.add(new ArrayList<Integer>());
+        NombAristas.get(Cont).add(a);
+        NombAristas.get(Cont).add(b);
+        Cont++;
         adjl.get(a).add(b);
         adjl.get(b).add(a);
     }
@@ -86,6 +190,7 @@ class Graph {
     }
 
     public void MostrarMatriz() {
+        System.out.println("La matriz de adyacencia es:");
         for (int i = 1; i <= vertices; i++) {
             for (int j = 1; j <= vertices; j++) {
                 System.out.print((adj[i][j] ? 1 : 0) + " ");
@@ -103,42 +208,64 @@ class Graph {
         }
     }
 
-    public int tipo() {
+    public String tipo() {
         for (int i = 1; i <= this.vertices; i++) {
             if (adj[i][i]) {
-                return 1;
+                return "Pseudografo";
             }
         }
         for (int i = 1; i <= this.vertices; i++) {
             for (int v : adjl.get(i)) {
                 if (adjl.get(i).indexOf(v) != adjl.get(i).lastIndexOf(v)) {
-                    return 2;
+                    return "Multigrafo";
                 }
             }
         }
-        return 0;
+        return "Grafo Simple";
     }
 
-    public int maxGrado() {
+    public String maxGrado() {
+        String ret = "";
+        ArrayList<Integer> ver = new ArrayList();
         int max = this.gradoL(1);
-        for (int i = 2; i <= vertices; i++) {
+        for (int i = 1; i <= vertices; i++) {
             int grad = this.gradoL(i);
             if (max < grad) {
                 max = grad;
+                ver.clear();
+            }
+            if (max == grad) {
+                ver.add(i);
             }
         }
-        return max;
+        ret += "Maximo grado: " + max + ", los vertices con este grado son {";
+        for (int v : ver) {
+            ret += v + ",";
+        }
+        ret += "\b}";
+        return ret;
     }
 
-    public int minGrado() {
+    public String minGrado() {
+        String ret = "";
+        ArrayList<Integer> ver = new ArrayList();
         int min = this.gradoL(1);
-        for (int i = 2; i <= vertices; i++) {
+        for (int i = 1; i <= vertices; i++) {
             int grad = this.gradoL(i);
             if (min > grad) {
                 min = grad;
+                ver.clear();
+            }
+            if (min == grad) {
+                ver.add(i);
             }
         }
-        return min;
+        ret += "Minimo grado: " + min + ", los vertices con este grado son {";
+        for (int v : ver) {
+            ret += v + ",";
+        }
+        ret += "\b}";
+        return ret;
     }
 
     private boolean[] visitado;
@@ -152,6 +279,7 @@ class Graph {
         }
     }
 
+    //HAMILTONIANO
     private LinkedList<Integer> hamilCycle;
 
     public boolean isHamiltonian() {
@@ -181,6 +309,7 @@ class Graph {
             visitado[hamilCycle.pollLast()] = false;
         }
     }
+    //HAMILTONIANO
 
     public boolean esEuleriano() {
         for (int i = 1; i <= vertices; i++) {
@@ -306,7 +435,7 @@ class Graph {
         ArrayList<Integer> puentes = new ArrayList<>();
         ArrayList<Integer> Eliminados = new ArrayList<>();
         ArrayList<ArrayList<Integer>> Bloques = new ArrayList<>();
-        ArrayList<Integer> temp = new ArrayList<>();
+        ArrayList<Integer> temporal = new ArrayList<>();
         puentes(puentes);
         puntosdecorte(PtoCorte, Eliminados);
         if (PtoCorte.size() > 0) {
@@ -325,21 +454,21 @@ class Graph {
                 i++;
             } while (Eliminados.contains(i) || PtoCorte.contains(i));
             visitado = new boolean[vertices + 1];
-            DFS_bloques(i, Eliminados, PtoCorte, temp);
-            if (!Arraylistcontain(Bloques, temp)) {
+            DFS_bloques(i, Eliminados, PtoCorte, temporal);
+            if (!Arraylistcontain(Bloques, temporal)) {
                 cont++;
                 Bloques.add(new ArrayList<Integer>());
-                for (Integer t : temp) {
+                for (Integer t : temporal) {
                     Bloques.get(cont).add(t);
                 }
             }
-            for (Integer j : temp) {
+            for (Integer j : temporal) {
                 if (!PtoCorte.contains(j)) {
                     Eliminados.add(j);
                 }
             }
             PtoCorte.clear();
-            temp.clear();
+            temporal.clear();
             puntosdecorte(PtoCorte, Eliminados);
         } while (Eliminados.size() < vertices);
 
@@ -420,9 +549,9 @@ class Graph {
     //BIPARTIDO
 
     public boolean esRegular() {
-        int r = gradoL(1);
+        int gr = gradoL(1);
         for (int i = 2; i <= vertices; i++) {
-            if (r != gradoL(i)) {
+            if (gr != gradoL(i)) {
                 return false;
             }
         }
@@ -467,21 +596,23 @@ class Graph {
         boolean arbol[][] = new boolean[vertices + 1][vertices + 1];
         for (int i = 1; i <= vertices; i++) {
             for (int j = 1; j <= vertices; j++) {
-                if (prim[i][2] == j) {
-                    arbol[i][j] = true;
-                } else {
-                    arbol[i][j] = false;
-                }
-
+                arbol[i][j] = (prim[i][2] == j);
             }
         }
+        for (int i = 1; i <= vertices; i++) {
+            for (int j = 1; j <= vertices; j++) {
+                if (arbol[i][j]) {
+                    arbol[j][i] = arbol[i][j];
+                }
+            }
+        }
+        System.out.println("La matriz de adyacencia de el arbol de expansion es:");
         for (int i = 1; i <= vertices; i++) {
             for (int j = 1; j <= vertices; j++) {
                 System.out.print((arbol[i][j] ? 1 : 0) + " ");
             }
             System.out.println();
         }
-        System.out.println("Finalizado");
     }
     //BIPARTIDO, REGULAR, ARBOL, ARBOL DE EXPANSION
 
@@ -549,22 +680,26 @@ class Graph {
 
         this.floydwarshall();
 
-        ArrayList<Integer> recorrido = new ArrayList<Integer>();
+        ArrayList<Integer> recorrido = new ArrayList<>();
 
-        int V = 0;
-        V = a;
-        recorrido.add(a);
-        for (int i = 0; i < d[a][b] - 1; i++) {
-            V = r[V][b];
-            recorrido.add(V);
+        try {
+            int V;
+            V = a;
+            recorrido.add(a);
+            for (int i = 0; i < d[a][b] - 1; i++) {
+                V = r[V][b];
+                recorrido.add(V);
 
+            }
+            recorrido.add(b);
+            String s = "";
+            for (int i = 0; i < recorrido.size(); i++) {
+                s += " " + recorrido.get(i);
+            }
+            System.out.println(s);
+        } catch (java.lang.ArrayIndexOutOfBoundsException e) {
+            System.out.println("Los vertices no estan en la misma componente");
         }
-        recorrido.add(b);
-        String s = "";
-        for (int i = 0; i < recorrido.size(); i++) {
-            s += " " + recorrido.get(i);
-        }
-        System.out.println(s);
     }
 
     public int diametro() {
@@ -726,7 +861,7 @@ class Graph {
 
     private void BFSdistancia() {
         visitado = new boolean[vertices + 1];
-        LinkedList<pair> cola = new LinkedList<pair>();
+        LinkedList<pair> cola = new LinkedList<>();
         cola.add(new pair(1, 0));
         visitado[1] = true;
         while (!cola.isEmpty()) {

@@ -1,22 +1,20 @@
 package labmatematicasdiscretas;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class DiGraph {
 
-    private final int vertices, aristas;
+    private final int vertices, aristas, source, target;
     private final boolean[][] adj;
     private final int[] resCap;
     private final int[][] cap, flow;
 
     ;
-    public DiGraph(int vertices, int aristas) {
+    public DiGraph(int vertices, int aristas, int source, int target) {
         this.vertices = vertices;
         this.aristas = aristas;
+        this.source = source;
+        this.target = target;
         adj = new boolean[vertices + 1][vertices + 1];
         cap = new int[vertices + 1][vertices + 1];
         flow = new int[vertices + 1][vertices + 1];
@@ -28,7 +26,7 @@ public class DiGraph {
         cap[v1][v2] = capacity;
     }
 
-    public int maxFlow(int source, int target) {
+    public int maxFlow() {
         boolean incrementPathFound;
         int maxFlow = 0;
         do {
@@ -51,7 +49,7 @@ public class DiGraph {
                                 resCap[i] = aux;
                             }
                             if (i == target) {
-                                syncFlow(source, target, parents);
+                                syncFlow(parents);
                                 maxFlow += resCap[target];
                                 incrementPathFound = true;
                             }
@@ -66,7 +64,7 @@ public class DiGraph {
                                 resCap[i] = aux;
                             }
                             if (i == target) {
-                                syncFlow(source, target, parents);
+                                syncFlow(parents);
                                 maxFlow += resCap[target];
                                 incrementPathFound = true;
                             }
@@ -79,7 +77,7 @@ public class DiGraph {
         return maxFlow;
     }
 
-    private void syncFlow(int source, int target, int[] parents) {
+    private void syncFlow(int[] parents) {
         int v = target;
         int rc = resCap[target];
         do {
