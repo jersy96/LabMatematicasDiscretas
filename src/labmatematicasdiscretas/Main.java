@@ -110,7 +110,7 @@ public class Main {
                         }
                         if (op != 10) {
                             System.out.println("Presione enter para continuar");
-                            st = new StringTokenizer(br.readLine());
+                            br.readLine();
                         }
                     } while (op != 10);
                     break;
@@ -667,7 +667,7 @@ class Graph {
 
         ArrayList<Integer> recorrido = new ArrayList<>();
 
-        int V = 0;
+        int V;
         V = a;
         recorrido.add(V);
         for (int i = 0; i < d[a][b]; i++) {
@@ -840,32 +840,4 @@ class Graph {
             }
         }
     }
-
-    private void BFSdistancia() {
-        visitado = new boolean[vertices + 1];
-        LinkedList<pair> cola = new LinkedList<>();
-        cola.add(new pair(1, 0));
-        visitado[1] = true;
-        while (!cola.isEmpty()) {
-            pair ver = cola.poll();
-            System.out.println("Estoy en el vertice: " + ver.f + " y distancia " + ver.s);
-            for (int i = 1; i <= vertices; ++i) {
-                if (adj[ver.f][i] && !visitado[i]) {
-                    visitado[i] = true;
-                    cola.add(new pair(i, ver.s + 1));
-                }
-            }
-        }
-    }
-}
-
-class pair {
-
-    int f, s;
-
-    public pair(int f, int s) {
-        this.f = f;
-        this.s = s;
-    }
-
 }
