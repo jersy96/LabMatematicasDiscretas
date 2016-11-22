@@ -79,7 +79,7 @@ public class Main {
                                 System.out.println("El grafo es Arbol: " + g.esArbol());
                                 if (g.esconexo()) {
                                     g.ArbolExpansion();
-                                }else{
+                                } else {
                                     System.out.println("El grafo no es conexo, no se puede calcular un arbol de expansion");
                                 }
                                 break;
@@ -620,50 +620,38 @@ class Graph {
     public void floydwarshall() {
         d = new int[vertices + 1][vertices + 1];
         r = new int[vertices + 1][vertices + 1];
+        int inf = (int) Double.MAX_VALUE;
         for (int i = 0; i <= vertices; i++) {
             for (int j = 0; j <= vertices; j++) {
-                if (i == j) {
-                    d[i][i] = 0;
-                    r[i][i] = i;
-                } else if (adj[i][j] == true) {
-                    d[i][j] = 1;
-                    r[i][j] = j;
+                if (i != j) {
+                    if (adj[i][j] == false) {//no son adyacentes
+                        r[i][j] = -1;//numero arvitrario;
+                        d[i][j] = inf;
+                    } else {
+                        r[i][j] = j;//Atraves de j
+                        d[i][j] = 1;//distancia de i a j como son adyacentes es 1;
+                    }
                 } else {
-                    d[i][j] = (int) Double.MAX_VALUE;
-                    r[i][j] = -1;
+                    d[i][j] = 0;
+                    r[i][j] = i;
                 }
             }
-
         }
-        for (int k = 0; k <= vertices; k++) {
-            for (int i = 1; i <= vertices; i++) {
-                for (int j = 1; j < i; j++) {
-                    if ((i != k) && (j != k) && (r[k][j] != -1) && (r[i][k] != -1)) {
-                        int sum = d[k][j] + d[i][k];
-                        if (sum < d[i][j]) {
-                            r[i][j] = k;
-                            d[i][j] = d[k][j] + d[i][k];
-                        }
 
+        for (int k = 1; k <= vertices; k++) { //for k from 1 to |V| // standard Floyd-Warshall implementation
+            for (int i = 1; i <= vertices; i++) {
+                for (int j = 1; j <= vertices; j++) {
+                    int numd = d[i][k] + d[k][j];
+                    int numr = r[i][k];
+                    if ((r[i][k] != -1) && (r[k][j] != -1)) {
+                        if ((d[i][k] + d[k][j] < d[i][j])) {
+
+                            d[i][j] = d[i][k] + d[k][j];
+                            r[i][j] = r[i][k];
+                        }
                     }
                 }
             }
-
-        }
-        for (int k = vertices; k > 0; k--) {
-            for (int i = 1; i <= vertices; i++) {
-                for (int j = i; j <= vertices; j++) {
-                    if ((i != k) && (j != k) && (r[k][j] != -1) && (r[i][k] != -1)) {
-                        int sum = d[k][j] + d[i][k];
-                        if (sum < d[i][j]) {
-                            r[i][j] = k;
-                            d[i][j] = d[k][j] + d[i][k];
-                        }
-
-                    }
-                }
-            }
-
         }
     }
 
@@ -679,24 +667,21 @@ class Graph {
 
         ArrayList<Integer> recorrido = new ArrayList<>();
 
-        try {
-            int V;
-            V = a;
-            recorrido.add(a);
-            for (int i = 0; i < d[a][b] - 1; i++) {
-                V = r[V][b];
-                recorrido.add(V);
+        int V = 0;
+        V = a;
+        recorrido.add(V);
+        for (int i = 0; i < d[a][b]; i++) {
+            V = r[V][b];
+            recorrido.add(V);
 
-            }
-            recorrido.add(b);
-            String s = "";
-            for (int i = 0; i < recorrido.size(); i++) {
-                s += " " + recorrido.get(i);
-            }
-            System.out.println(s);
-        } catch (java.lang.ArrayIndexOutOfBoundsException e) {
-            System.out.println("Los vertices no estan en la misma componente");
         }
+
+        //Apartir de aquí empieza a mostrar el recorrido:
+        String s = "";
+        for (int i = recorrido.size() - 1; i >= 0; i--) {
+            s += " " + recorrido.get(i);
+        }
+        System.out.println(s);
     }
 
     public int diametro() {
